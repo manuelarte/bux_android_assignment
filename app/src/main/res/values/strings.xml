@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">BUX Assignment</string>
+    <string name="select_product">Select Product</string>
+    <string name="product_detail_current_price_title">Current Price</string>
+    <string name="product_detail_difference_price_title">Difference With Closing Price</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_product">Product View</string>
+</resources>
