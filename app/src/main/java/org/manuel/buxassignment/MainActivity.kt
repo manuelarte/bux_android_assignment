@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-class ProductItem(private val displayName: String, val productId: String) {
+class ProductItem(val displayName: String, val productId: String) {
     override fun toString(): String {
         return displayName
     }
@@ -64,7 +64,7 @@ class ProductItem(private val displayName: String, val productId: String) {
 class OnProductSelected(private val activity: MainActivity) : AdapterView.OnItemClickListener {
 
     override fun onItemClick(p0: AdapterView<*>?, p1: View?, index: Int, p3: Long) {
-        val productItem = PRODUCTS[index]
+        val productItem = p0!!.getItemAtPosition(index) as ProductItem
         Log.v(TAG, "Product selected: $productItem")
         activity.onProductSelected(productItem)
     }

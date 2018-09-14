@@ -23,9 +23,12 @@
         <activity
             android:name=".ProductActivity"
             android:label="@string/title_activity_product"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".MainActivity">
-        </activity>
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ProductDetailErrorActivity"
+            android:label="@string/title_activity_product_detail_error"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
