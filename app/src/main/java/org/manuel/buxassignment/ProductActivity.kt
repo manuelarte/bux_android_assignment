@@ -5,16 +5,16 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.widget.TextView
 import com.fasterxml.jackson.databind.ObjectMapper
 import kotlinx.android.synthetic.main.activity_product.*
-import org.manuel.buxassignment.domain.Price
 import org.manuel.buxassignment.domain.ProductDetail
 import org.manuel.buxassignment.domain.events.ConnectedEvent
 import org.manuel.buxassignment.domain.events.SubscriptionEvent
 import org.manuel.buxassignment.domain.events.TradingQuoteEvent
 import org.manuel.buxassignment.services.ProductService
-import org.manuel.buxassignment.websocket.BuxWebSocketHandler
 import org.manuel.buxassignment.websocket.BuxWebSocketHandlerImpl
 import retrofit2.Call
 import retrofit2.Callback
@@ -36,6 +36,11 @@ class ProductActivity : AppCompatActivity() {
 
     private lateinit var mProductId: String
     private lateinit var mContentLayout: View
+    private lateinit var mProductTitleView: TextView
+    private lateinit var mProductCurrentPriceValueView: TextView
+    private lateinit var mProductDifferencePriceValueView: TextView
+    private val mProductUpdateAnimation = createPriceUpdateAnimation()
+
     private lateinit var mLoadingLayout: View
     private lateinit var mProductDetail: ProductDetail
 
@@ -66,8 +71,12 @@ class ProductActivity : AppCompatActivity() {
         mContentLayout.visibility = View.VISIBLE
         mLoadingLayout.visibility = View.GONE
 
-        val productTitle = findViewById<TextView>(R.id.product_title)
-        productTitle.text = productDetail.displayName
+        mProductTitleView = findViewById(R.id.product_title)
+        mProductCurrentPriceValueView = findViewById(R.id.product_current_price_value)
+        mProductDifferencePriceValueView = findViewById<TextView>(R.id.product_difference_price_value)
+
+
+        mProductTitleView.text = productDetail.displayName
         onPriceUpdated(productDetail.currentPrice.amount)
 
         mBuxWebSocketHandler = BuxWebSocketHandlerImpl(this)
@@ -91,12 +100,18 @@ class ProductActivity : AppCompatActivity() {
     }
 
     private fun onPriceUpdated(currentPrice: BigDecimal) {
-        val productCurrentPriceValue = findViewById<TextView>(R.id.product_current_price_value)
-        productCurrentPriceValue.text = mCurrencyFormat.format(currentPrice) +
-                AllowedProductCountries.getCurrencyFromCountryCode(mProductDetail.currentPrice.currency).symbol
+        mProductUpdateAnimation.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationEnd(animation: Animation?) {
+                mProductCurrentPriceValueView.text = mCurrencyFormat.format(currentPrice) +
+                        AllowedProductCountries.getCurrencyFromCountryCode(mProductDetail.currentPrice.currency).symbol
+            }
+            override fun onAnimationStart(animation: Animation?) { }
+            override fun onAnimationRepeat(animation: Animation?) { }
+        })
+        mProductCurrentPriceValueView.startAnimation(mProductUpdateAnimation)
 
-        val productDifferencePriceValue = findViewById<TextView>(R.id.product_difference_price_value)
-        productDifferencePriceValue.text = NumberFormat.getPercentInstance().format(getPercentage(currentPrice))
+
+        mProductDifferencePriceValueView.text = NumberFormat.getPercentInstance().format(getPercentage(currentPrice))
     }
 
     private fun getPercentage(currentPrice: BigDecimal): Number {
@@ -111,6 +126,14 @@ class ProductActivity : AppCompatActivity() {
     override fun onBackPressed() {
         mBuxWebSocketHandler.close()
         super.onBackPressed()
+    }
+
+    private fun createPriceUpdateAnimation(): Animation {
+        val anim = AlphaAnimation(1.0f, 0.0f)
+        anim.duration = 200
+        anim.repeatCount = 1
+        anim.repeatMode = Animation.REVERSE
+        return anim
     }
 
 }
