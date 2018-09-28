@@ -1,6 +1,6 @@
 package org.manuel.buxassignment.websocket
 
-import org.manuel.buxassignment.websocket.domain.TradingEvent
+import org.manuel.buxassignment.domain.events.TradingEvent
 
 interface BuxWebSocketHandler {
 

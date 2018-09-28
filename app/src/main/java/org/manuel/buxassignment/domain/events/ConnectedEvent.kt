@@ -1,4 +1,4 @@
-package org.manuel.buxassignment.websocket.domain
+package org.manuel.buxassignment.domain.events
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 

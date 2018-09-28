@@ -6,7 +6,7 @@ import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
-import org.manuel.buxassignment.websocket.domain.TradingEvent
+import org.manuel.buxassignment.domain.events.TradingEvent
 
 private const val NORMAL_CLOSURE_STATUS = 1000
 
