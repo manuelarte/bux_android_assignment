@@ -16,7 +16,7 @@ private val PRODUCTS = arrayOf(ProductItem("Germany30", "sb26493"), ProductItem(
         ProductItem("EUR/USD", "sb26502"), ProductItem("Gold", "sb26500"), ProductItem("Apple", "sb26513"),
         ProductItem("Deutsche Bank","sb28248"))
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ProductListFragment.OnListFragmentInteractionListener {
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -52,6 +52,14 @@ class MainActivity : AppCompatActivity() {
             putExtra(PRODUCT_ID, productItem.productId)
         }
         startActivity(intent)
+    }
+
+    override fun getProducts(): List<ProductItem> {
+        return PRODUCTS.toList()
+    }
+
+    override fun onListFragmentInteraction(item: ProductItem?) {
+        this.onProductSelected(item!!)
     }
 }
 
